@@ -23,7 +23,7 @@
 			swapcontext(&contexts[save], &contexts[c_i]); \
 			c_i = save; \
 		} \
-}while(0)
+    }while(0)
 #define switch_coro() \
 	do { \
 		clock_gettime(CLOCK_REALTIME, &t_end); \
@@ -39,7 +39,7 @@
 			} \
 			clock_gettime(CLOCK_REALTIME, &t_start); \
 		} \
-}while(0)
+    }while(0)
 #define finish_others() \
 	do{ \
 		clock_gettime(CLOCK_REALTIME, &t_end); \
@@ -57,7 +57,7 @@
 		clock_gettime(CLOCK_REALTIME, &t_start); \
 	}while(0)
 #define handle_error(msg) \
-   do { perror(msg); exit(EXIT_FAILURE); } while (0)
+    do { perror(msg); exit(EXIT_FAILURE); } while (0)
 typedef struct arr{
 	int * ptr;
 	int len;
@@ -122,7 +122,6 @@ int main(int argc, char const *argv[]) {
 
 
 	if(argc<3){
-
 		printf("Usage :./f T filename ...\n");
 		return 0;
 	}
@@ -172,8 +171,8 @@ int main(int argc, char const *argv[]) {
 
 	int ch=0;
 	gettimeofday(&t_start, 0);
-	if(!ch){ ch=1;
-
+	if(!ch){ 
+        ch=1;
 		if (swapcontext(&main_context, &contexts[c_i=0]) == -1)
 		handle_error("swapcontext");
 	}
@@ -229,7 +228,7 @@ int min(arr * list_of_arr, int size, int * ret){
 
 void merge(arr * list_of_arr, int size , FILE * fp){
 	int a;
-  while(min(list_of_arr, size, &a)){
+    while(min(list_of_arr, size, &a)){
 		fprintf(fp, "%d\n", a);
 	}
 }
