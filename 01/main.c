@@ -58,11 +58,13 @@
 	}while(0)
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
 typedef struct arr{
 	int * ptr;
 	int len;
 	int pos;
 }arr;
+
 int switch_n=0;
 ucontext_t main_context;
 ucontext_t * contexts;
@@ -80,21 +82,32 @@ void sort(int * ptr, int len, int orgn_len) {
 	struct timespec t_start;
 	struct timespec t_end;
 	clock_gettime(CLOCK_REALTIME, &t_start);
-	int save=0;switch_coro();
-	int i=0, j=0;switch_coro();
-	int temp;switch_coro();
-	int pivot =  ptr[len / 2];switch_coro();
+	int save=0;
+    switch_coro();
+	int i=0, j=0;
+    switch_coro();
+	int temp;
+    switch_coro();
+	int pivot =  ptr[len / 2];
+    switch_coro();
 	if (len < 2) {
 		finish_others();
 		return;
 	}
-	for (i=0, j=len-1; ;i++,j--) {switch_coro();
-		while (pivot>ptr[i]) {i++;switch_coro();}
-		while (ptr[j]>pivot) {j--;switch_coro();}
-		if (i>=j) break;switch_coro();
-		temp = ptr[i];switch_coro();
-		ptr[i] = ptr[j];switch_coro();
-		ptr[j] =temp;switch_coro();
+	for (i=0, j=len-1; ;i++,j--) {
+        switch_coro();
+		while (pivot>ptr[i]) {i++;
+        switch_coro();}
+		while (ptr[j]>pivot) {j--;
+        switch_coro();}
+		if (i>=j) break;
+        switch_coro();
+		temp = ptr[i];
+        switch_coro();
+		ptr[i] = ptr[j];
+        switch_coro();
+		ptr[j] =temp;
+        switch_coro();
 	}
 	sort(ptr, i, orgn_len);
 	sort(ptr+i, len-i, orgn_len);
