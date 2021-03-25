@@ -198,38 +198,38 @@ int main(int argc, char const *argv[]) {
 	return 0;
 }
 
-// int min(arr * list_of_arr, int size, int * ret){
-// 	int min;
-// 	int k=0;
-// 	int s=0;
-// 	int i=0;
-// 	for(i =0; i<size;i++){
-// 		if(list_of_arr[i].pos<list_of_arr[i].len){
-// 			min = list_of_arr[i].ptr[list_of_arr[i].pos];
-// 			k=i;
-// 			break;
-// 		}
-// 	}
-// 	if(i==size){
-// 		return 0;
-// 	}
-// 	for(int i =k; i<size;i++){
-// 		if(list_of_arr[i].pos<list_of_arr[i].len){
-// 			if(min>=list_of_arr[i].ptr[list_of_arr[i].pos]){
-// 				min = list_of_arr[i].ptr[list_of_arr[i].pos];
-// 				s=i;
-// 			}
-// 		}
-// 	}
-// 	list_of_arr[s].pos++;
-// 	*ret = min;
-// 	return 1;
-// }
+int min(arr * list_of_arr, int size, int * ret){
+	int min;
+	int k=0;
+	int s=0;
+	int i=0;
+	for(i =0; i<size;i++){
+		if(list_of_arr[i].pos<list_of_arr[i].len){
+			min = list_of_arr[i].ptr[list_of_arr[i].pos];
+			k=i;
+			break;
+		}
+	}
+	if(i==size){
+		return 0;
+	}
+	for(int i =k; i<size;i++){
+		if(list_of_arr[i].pos<list_of_arr[i].len){
+			if(min>=list_of_arr[i].ptr[list_of_arr[i].pos]){
+				min = list_of_arr[i].ptr[list_of_arr[i].pos];
+				s=i;
+			}
+		}
+	}
+	list_of_arr[s].pos++;
+	*ret = min;
+	return 1;
+}
 
 
-// void merge(arr * list_of_arr, int size , FILE * fp){
-// 	int a;
-//   while(min(list_of_arr, size, &a)){
-// 		fprintf(fp, "%d\n", a);
-// 	}
-// }
+void merge(arr * list_of_arr, int size , FILE * fp){
+	int a;
+  while(min(list_of_arr, size, &a)){
+		fprintf(fp, "%d\n", a);
+	}
+}
