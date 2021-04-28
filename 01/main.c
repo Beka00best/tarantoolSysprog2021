@@ -6,8 +6,10 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <time.h>
+#define M 1000000000
+#define TIME CLOCK_MONOTONIC
 
-#define STACK_SIZE 1024 * 1024 * 4
+#define STACK_SIZE 1024 * 1024
 #define goto_unfinished()                  \
     do                                     \
     {                                      \
@@ -32,7 +34,7 @@
     do                                                                                                 \
     {                                                                                                  \
         clock_gettime(CLOCK_REALTIME, &t_end);                                                         \
-        int delta = (t_end.tv_sec - t_start.tv_sec) * 1000000000LLU + t_end.tv_nsec - t_start.tv_nsec; \
+        int delta = (t_end.tv_sec - t_start.tv_sec) * M + t_end.tv_nsec - t_start.tv_nsec; \
         if (delta > 1000 * (T / c_s))                                                                  \
         {                                                                                              \
             contexts_times[c_i] += delta;                                                              \
@@ -51,7 +53,7 @@
     do                                                                                                            \
     {                                                                                                             \
         clock_gettime(CLOCK_REALTIME, &t_end);                                                                    \
-        contexts_times[c_i] += (t_end.tv_sec - t_start.tv_sec) * 1000000000LLU + t_end.tv_nsec - t_start.tv_nsec; \
+        contexts_times[c_i] += (t_end.tv_sec - t_start.tv_sec) * M + t_end.tv_nsec - t_start.tv_nsec; \
         if (len == orgn_len)                                                                                      \
         {                                                                                                         \
             c_ret_n++;                                                                                            \
@@ -157,9 +159,8 @@ int main(int argc, char const *argv[])
     int size = 0;
     int tmp = 0;
     double Elapsed;
-    struct timeval t_start;
-    struct timeval t_end;
-
+    struct timespec t_start;
+    struct timespec t_end;
     if (argc < 3)
     {
         printf("Usage :./f T filename ...\n");
@@ -177,6 +178,7 @@ int main(int argc, char const *argv[])
         coroutine_finished[i] = 0;
     }
     T = atof(argv[1]);
+    clock_gettime(TIME, &t_start);
     for (int i = 0; i < len; i++)
     {
         fp = fopen(argv[i + 2], "r");
@@ -215,20 +217,18 @@ int main(int argc, char const *argv[])
             contexts[i].uc_link = &contexts[i + 1];
         makecontext(&contexts[i], (void (*)(void))sort, 3, list_of_arr[i].ptr, list_of_arr[i].len, list_of_arr[i].len);
     }
-    getcontext(&main_context);
-
+    clock_gettime(TIME, &t_end); 
     int ch = 0;
-    gettimeofday(&t_start, 0);
     if (!ch)
     {
         ch = 1;
         if (swapcontext(&main_context, &contexts[c_i = 0]) == -1)
             handle_error("swapcontext");
-    }
-    gettimeofday(&t_end, 0);
+    } 
+    // clock_gettime(TIME, &t_end);
     for (int i = 0; i < len; i++)
     {
-        printf("coro%d time = %12llu, switch_n = %llu\n", i, contexts_times[i] / 1000, switch_cont_n[i]);
+        printf("coro%d time = %12ld, switch_n = %llu\n", i, contexts_times[i] / 1000, switch_cont_n[i]);
     }
     fp = fopen("result.txt", "w");
     merge(list_of_arr, len, fp);
@@ -244,7 +244,7 @@ int main(int argc, char const *argv[])
     free(contexts_times);
     free(switch_cont_n);
     free(coroutine_finished);
-    printf("Elapsed =    %12lld\n", (t_end.tv_sec - t_start.tv_sec) * 1000000LL + (t_end.tv_usec - t_start.tv_usec));
+    printf("Elapsed =    %12ld\n", 1000000 * (t_end.tv_sec - t_start.tv_sec) + (t_end.tv_nsec - t_start.tv_nsec) / 1000);
     return 0;
 }
 
