@@ -5,7 +5,8 @@ CFLAGS	+= -Wundef -Wpointer-arith -Wcast-align -Wshadow
 CFLAGS	+= -Wwrite-strings
 CFLAGS	+= -Wswitch-enum -Wunreachable-code -Winit-self
 CFLAGS	+= -Wno-unused-parameter -pedantic -O3
-LDFLAGS	=
+CFLAGS	+= -fsanitize=address, -fsanitize=leak
+LDFLAGS	= -fsanitize=address, -fsanitize=leak
 
 BASE_SOURCES = shell.c parser.c 
 SOURCES		= $(BASE_SOURCES)
