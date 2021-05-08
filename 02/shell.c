@@ -115,7 +115,10 @@ int main() {
             pid_t pid = fork();
             bool allow_input_redirect = (i == 0 || stream.cmds[i-1].status != PIPE);
             if (pid == 0) { // if child 
-                return exec_child(&cmd, prev_fd, fd, allow_input_redirect);
+                int tmp = exec_child(&cmd, prev_fd, fd, allow_input_redirect);
+                clean_up(&stream);
+                free(pid_running);
+                return tmp;
             } else if (pid != -1) { // parent
                 prev_success = exec_parent(&cmd, &prev_fd, fd, pid_running, 
                     &last_pid_idx, pid);
