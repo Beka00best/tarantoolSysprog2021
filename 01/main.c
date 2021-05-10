@@ -161,6 +161,7 @@ int main(int argc, char const *argv[])
     double Elapsed;
     struct timespec t_start;
     struct timespec t_end;
+    clock_gettime(TIME, &t_start);
     if (argc < 3)
     {
         printf("Usage :./f T filename ...\n");
@@ -192,7 +193,7 @@ int main(int argc, char const *argv[])
         list_of_arr[i].pos = 0;
         fclose(fp);
     }
-    clock_gettime(TIME, &t_start);
+    // clock_gettime(TIME, &t_start);
     for (int i = 0; i < len; i++)
     {
         fp = fopen(argv[i + 2], "r");
